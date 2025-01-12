@@ -1,6 +1,25 @@
 import Image from "next/image";
 
-export default function Home() {
+// コーヒーデータの型定義
+interface Coffee {
+  title: string;
+  description: string;
+  ingredients: string[];
+  image: string;
+}
+
+// サーバーサイドでデータを取得
+async function getCoffeeData(): Promise<Coffee[]> {
+  const res = await fetch('https://api.sampleapis.com/coffee/hot');
+  if (!res.ok) {
+    throw new Error('Failed to fetch coffee data');
+  }
+  return res.json();
+}
+
+export default async function Home() {
+  const coffeeData = await getCoffeeData();
+
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
@@ -47,6 +66,21 @@ export default function Home() {
           >
             Read our docs
           </a>
+        </div>
+
+        <div className="mt-8 w-full max-w-2xl">
+          <h2 className="text-xl font-bold mb-4">Hot Coffee Menu</h2>
+          <div className="space-y-4">
+            {coffeeData.map((coffee) => (
+              <div key={coffee.title} className="p-4 border rounded-lg">
+                <h3 className="font-semibold">{coffee.title}</h3>
+                <p className="text-sm text-gray-600">{coffee.description}</p>
+                <div className="mt-2 text-xs text-gray-500">
+                  Ingredients: {coffee.ingredients.join(', ')}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
