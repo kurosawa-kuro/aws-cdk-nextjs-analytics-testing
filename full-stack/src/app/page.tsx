@@ -1,4 +1,21 @@
 import Image from "next/image";
+import { PrismaClient } from '@prisma/client';
+
+// Userデータの型定義
+interface User {
+  id: number;
+  email: string;
+  name: string | null;
+}
+
+// Prismaクライアントの初期化
+const prisma = new PrismaClient();
+
+// サーバーサイドでユーザーデータを取得
+async function getUsers(): Promise<User[]> {
+  const users = await prisma.user.findMany();
+  return users;
+}
 
 // コーヒーデータの型定義
 interface Coffee {
@@ -18,6 +35,7 @@ async function getCoffeeData(): Promise<Coffee[]> {
 }
 
 export default async function Home() {
+  const users = await getUsers();
   const coffeeData = await getCoffeeData();
 
   return (
@@ -66,6 +84,20 @@ export default async function Home() {
           >
             Read our docs
           </a>
+        </div>
+
+        <div className="mt-8 w-full max-w-2xl">
+          <h2 className="text-xl font-bold mb-4">User List</h2>
+          <div className="space-y-4">
+            {users.map((user) => (
+              <div key={user.id} className="p-4 border rounded-lg">
+                <h3 className="font-semibold">{user.email}</h3>
+                <p className="text-sm text-gray-600">
+                  {user.name || 'No name provided'}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="mt-8 w-full max-w-2xl">
