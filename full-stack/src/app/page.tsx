@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 
 // Userデータの型定義
 interface User {
@@ -8,9 +8,6 @@ interface User {
   name: string | null;
 }
 
-// Prismaクライアントの初期化
-const prisma = new PrismaClient();
-
 // サーバーサイドでユーザーデータを取得
 async function getUsers(): Promise<User[]> {
   // キャッシュ無効化
@@ -18,26 +15,10 @@ async function getUsers(): Promise<User[]> {
   return users;
 }
 
-// コーヒーデータの型定義
-interface Coffee {
-  title: string;
-  description: string;
-  ingredients: string[];
-  image: string;
-}
 
-// サーバーサイドでデータを取得
-async function getCoffeeData(): Promise<Coffee[]> {
-  const res = await fetch('https://api.sampleapis.com/coffee/hot');
-  if (!res.ok) {
-    throw new Error('Failed to fetch coffee data');
-  }
-  return res.json();
-}
 
 export default async function Home() {
   const users = await getUsers();
-  const coffeeData = await getCoffeeData();
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
