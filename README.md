@@ -29,6 +29,8 @@ pnpm up -L
 pnpm add -D aws-cdk@latest
 
 ```
+cdk init app --language typescript
+
 # npmのロックファイルとnode_modulesを削除
 rm -rf package-lock.json node_modules
 

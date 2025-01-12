@@ -1,0 +1,2 @@
+CDKで環境チェック
+CDKでparameta storeで環境変数ファイルを排除
