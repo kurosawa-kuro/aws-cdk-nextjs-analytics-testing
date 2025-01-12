@@ -54,7 +54,10 @@ describe('Users API (Integration)', () => {
       const req = createTestRequest(mockBody);
 
       const res = await POST(req);
-      
+      if (!res) {
+        throw new Error('Response is undefined');
+      }
+
       expect(res.status).toBe(201);
       
       const responseData = await res.json();
