@@ -6,3 +6,6 @@ build:
 
 start:
 	cd src && pnpm run start
+
+generate-env:
+	cd infrastructure/script && node generate-env.js
