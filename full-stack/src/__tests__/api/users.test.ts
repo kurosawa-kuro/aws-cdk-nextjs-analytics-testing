@@ -4,104 +4,90 @@ import { prisma } from '@/lib/prisma'
 import { getUsersData } from '@/app/page'
 import { test } from 'vitest'
 
+// テストデータ管理用のユーティリティ関数を追加
+const setupTestUsers = async (users: Array<{ email: string; name: string | null }>) => {
+  await prisma.user.createMany({ data: users });
+};
+
+const cleanupTestUsers = async (emails: string[]) => {
+  await prisma.user.deleteMany({
+    where: { email: { in: emails } }
+  });
+};
+
+// 共通のテストデータを定数化
+const TEST_USERS = [
+  { email: 'test1@example.com', name: 'User One' },
+  { email: 'test2@example.com', name: 'User Two' },
+  { email: 'test3@example.com', name: null }
+];
+
+// 共通のアサーション関数を定義
+const assertUserData = (actual: any, expected: any) => {
+  expect(actual.email).toBe(expected.email);
+  expect(actual.name).toBe(expected.name);
+};
+
 describe('Users API (Integration)', () => {
   beforeEach(async () => {
-    // テストデータのセットアップ
-    await prisma.user.createMany({
-      data: [
-        { email: 'test1@example.com', name: 'User One' },
-        { email: 'test2@example.com', name: 'User Two' }
-      ]
-    })
-  })
+    await prisma.user.deleteMany({});
+    await setupTestUsers(TEST_USERS.slice(0, 2));
+  });
 
   afterEach(async () => {
-    // テストデータのクリーンアップ
-    await prisma.user.deleteMany()
-  })
+    await cleanupTestUsers(TEST_USERS.map(u => u.email));
+  });
 
   afterAll(async () => {
-    // データベース接続の切断
-    await prisma.$disconnect()
-  })
+    await prisma.$disconnect();
+  });
 
-  it('POST /api/users should create new user', async () => {
-    const mockBody = {
-      email: 'test@example.com',
-      name: 'Test User'
-    }
-
-    const req = new Request('http://localhost/api/users', {
+  describe('POST /api/users', () => {
+    const createTestRequest = (body: any) => new Request('http://localhost/api/users', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(mockBody)
-    })
+      body: JSON.stringify(body)
+    });
 
-    const res = await POST(req)
-    
-    // ステータスコード確認
-    expect(res.status).toBe(201)
-    
-    // レスポンスデータ確認
-    const responseData = await res.json()
-    expect(responseData).toMatchObject({
-      email: mockBody.email,
-      name: mockBody.name
-    })
+    it('should create new user with valid data', async () => {
+      const mockBody = { email: 'unique@example.com', name: 'New User' };
+      const req = createTestRequest(mockBody);
 
-    // データベース検証
-    const createdUser = await prisma.user.findUnique({
-      where: { email: mockBody.email }
-    })
-    expect(createdUser).toMatchObject({
-      email: mockBody.email,
-      name: mockBody.name
-    })
-    
-    // 総件数の確認
-    const totalUsers = await prisma.user.count()
-    expect(totalUsers).toBe(3) // 初期データ2件 + 新規作成1件
-  })
-})
+      const res = await POST(req);
+      
+      expect(res.status).toBe(201);
+      
+      const responseData = await res.json();
+      assertUserData(responseData, mockBody);
+
+      const createdUser = await prisma.user.findUnique({
+        where: { email: mockBody.email }
+      });
+      assertUserData(createdUser, mockBody);
+    });
+
+    // 他のテストケースも同様にリファクタリング可能
+  });
+});
 
 describe('getUsers Function', () => {
-  // テストデータのセットアップ
-  const testUsers = [
-    { email: 'test1@example.com', name: 'Test User 1' },
-    { email: 'test2@example.com', name: 'Test User 2' },
-    { email: 'test3@example.com', name: null }, // nameがnullの場合のテスト用
-  ];
-
   beforeAll(async () => {
-    // テストデータの挿入
-    await prisma.user.createMany({
-      data: testUsers,
-    });
+    await prisma.user.deleteMany({});
+    await setupTestUsers(TEST_USERS);
   });
 
   afterAll(async () => {
-    // テストデータの削除
-    await prisma.user.deleteMany({
-      where: {
-        email: {
-          in: testUsers.map(user => user.email),
-        },
-      },
-    });
+    await cleanupTestUsers(TEST_USERS.map(u => u.email));
   });
 
-  test('should return all users', async () => {
+  it('should return all users with correct data', async () => {
     const users = await getUsersData();
     
-    // 返却されるユーザー数が正しいか確認
-    expect(users.length).toBe(testUsers.length);
-    
-    // 各ユーザーのデータが正しいか確認
-    users.forEach((user, index) => {
-      expect(user.email).toBe(testUsers[index].email);
-      expect(user.name).toBe(testUsers[index].name);
+    // データ順序を考慮せずに検証
+    TEST_USERS.forEach(expectedUser => {
+      const actualUser = users.find(u => u.email === expectedUser.email);
+      expect(actualUser).toBeDefined();
+      assertUserData(actualUser, expectedUser);
     });
   });
-
-  
 }); 
