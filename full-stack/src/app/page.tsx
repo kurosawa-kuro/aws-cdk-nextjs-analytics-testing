@@ -9,16 +9,12 @@ interface User {
 }
 
 // サーバーサイドでユーザーデータを取得
-async function getUsers(): Promise<User[]> {
-  // キャッシュ無効化
-  const users = await prisma.user.findMany();
-  return users;
+export async function getUsersData(): Promise<User[]> {
+  return await prisma.user.findMany();
 }
 
-
-
 export default async function Home() {
-  const users = await getUsers();
+  const users = await getUsersData();
 
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
