@@ -1,6 +1,6 @@
 // config.js
-const { SSMClient, GetParameterCommand } = require("@aws-sdk/client-ssm");
-const _ = require('lodash');
+import { SSMClient, GetParameterCommand } from "@aws-sdk/client-ssm";
+import _ from 'lodash';
 
 class ConfigManager {
   constructor() {
@@ -71,8 +71,11 @@ function validateConfig(config) {
   }
 }
 
-// 使用例
-async function initializeApp() {
+// エクスポートをESモジュール形式に変更
+export { ConfigManager };
+
+// スクリプト実行時にinitializeAppを呼び出す
+(async () => {
   try {
     const configManager = new ConfigManager();
     const config = await configManager.getConfig();
@@ -80,19 +83,8 @@ async function initializeApp() {
     console.log('config:', config);
     console.log('S3 Bucket:', config.storage.s3Bucket);
     console.log('Environment:', config.app.env);
-    console.log('S3 Bucket:', config.storage.s3Bucket);
-    
-    return config;
   } catch (error) {
     console.error('Failed to initialize app:', error);
-    throw error;
+    process.exit(1);
   }
-}
-
-// エクスポート
-module.exports = { ConfigManager, initializeApp };
-
-// スクリプト実行時にinitializeAppを呼び出す
-(async () => {
-  await initializeApp();
 })();
