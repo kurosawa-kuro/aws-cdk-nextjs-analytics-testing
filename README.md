@@ -11,4 +11,4 @@ sudo mkdir -p /home/wsl/app
 sudo chown -R wsl:wsl /home/wsl/app
 
 cd /home/wsl/app
-git clone https://github.com/kurosawa-kuro/infra-devcontainer-aws-cdk-cicd-nodejs.git .
+git clone git@github.com:kurosawa-kuro/aws-cdk-nextjs-analytics-testing.git .
