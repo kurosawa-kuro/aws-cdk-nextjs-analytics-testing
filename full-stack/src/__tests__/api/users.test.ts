@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, afterAll } from 'vitest'
 import { POST } from '@/app/api/users/route'
 import { prisma } from '@/lib/prisma'
 
@@ -16,6 +16,11 @@ describe('Users API (Integration)', () => {
   afterEach(async () => {
     // テストデータのクリーンアップ
     await prisma.user.deleteMany()
+  })
+
+  afterAll(async () => {
+    // データベース接続の切断
+    await prisma.$disconnect()
   })
 
   it('POST /api/users should create new user', async () => {
@@ -42,10 +47,17 @@ describe('Users API (Integration)', () => {
       name: mockBody.name
     })
 
-    // データベースに実際に保存されたか確認
+    // データベース検証
     const createdUser = await prisma.user.findUnique({
       where: { email: mockBody.email }
     })
-    expect(createdUser).not.toBeNull()
+    expect(createdUser).toMatchObject({
+      email: mockBody.email,
+      name: mockBody.name
+    })
+    
+    // 総件数の確認
+    const totalUsers = await prisma.user.count()
+    expect(totalUsers).toBe(3) // 初期データ2件 + 新規作成1件
   })
 }) 
