@@ -8,6 +8,14 @@ const nextConfig: NextConfig = {
       '@': path.resolve(__dirname, 'src')
     }
     return config
+  },
+
+  experimental: {
+    turbo: {
+      resolveAlias: {
+        '@': path.resolve(__dirname, 'src')
+      }
+    }
   }
 }
 
