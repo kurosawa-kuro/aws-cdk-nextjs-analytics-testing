@@ -13,6 +13,7 @@ const prisma = new PrismaClient();
 
 // サーバーサイドでユーザーデータを取得
 async function getUsers(): Promise<User[]> {
+  // キャッシュ無効化
   const users = await prisma.user.findMany();
   return users;
 }
@@ -87,7 +88,15 @@ export default async function Home() {
         </div>
 
         <div className="mt-8 w-full max-w-2xl">
-          <h2 className="text-xl font-bold mb-4">User List</h2>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold">User List</h2>
+            <a
+              href="/users/add"
+              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+            >
+              Add User
+            </a>
+          </div>
           <div className="space-y-4">
             {users.map((user) => (
               <div key={user.id} className="p-4 border rounded-lg">
@@ -95,21 +104,6 @@ export default async function Home() {
                 <p className="text-sm text-gray-600">
                   {user.name || 'No name provided'}
                 </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="mt-8 w-full max-w-2xl">
-          <h2 className="text-xl font-bold mb-4">Hot Coffee Menu</h2>
-          <div className="space-y-4">
-            {coffeeData.map((coffee) => (
-              <div key={coffee.title} className="p-4 border rounded-lg">
-                <h3 className="font-semibold">{coffee.title}</h3>
-                <p className="text-sm text-gray-600">{coffee.description}</p>
-                <div className="mt-2 text-xs text-gray-500">
-                  Ingredients: {coffee.ingredients.join(', ')}
-                </div>
               </div>
             ))}
           </div>
