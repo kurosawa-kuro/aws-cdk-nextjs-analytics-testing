@@ -2,6 +2,7 @@
   "name": "full-stack",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -11,7 +12,11 @@
     "prepare": "ln -sf ../.env .env || true",
     "test": "vitest",
     "test:watch": "vitest watch",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "db:migrate": "prisma migrate dev",
+    "db:generate": "prisma generate",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:reset": "prisma migrate dev && prisma generate && tsx prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.2.1",
