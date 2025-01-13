@@ -17,6 +17,9 @@ importers:
       '@aws-sdk/client-ssm':
         specifier: ^3.726.1
         version: 3.726.1
+      dotenv:
+        specifier: ^16.4.7
+        version: 16.4.7
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -349,6 +352,10 @@ packages:
 
   bowser@2.11.0:
     resolution: {integrity: sha512-AlcaJBi/pqqJBIQ8U9Mcpc9i8Aqxn88Skv5d+xBX006BY5u8N3mGLHa5Lgppa7L/HfwgwLgZ6NYs+Ag6uUmJRA==}
+
+  dotenv@16.4.7:
+    resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
+    engines: {node: '>=12'}
 
   fast-xml-parser@4.4.1:
     resolution: {integrity: sha512-xkjOecfnKGkSsOwtZ5Pz7Us/T6mrbPQrq0nh+aCO5V9nk5NLWmasAHumTKjiPJPWANe+kAZ84Jc8ooJkzZ88Sw==}
@@ -1172,6 +1179,8 @@ snapshots:
   '@types/uuid@9.0.8': {}
 
   bowser@2.11.0: {}
+
+  dotenv@16.4.7: {}
 
   fast-xml-parser@4.4.1:
     dependencies:
