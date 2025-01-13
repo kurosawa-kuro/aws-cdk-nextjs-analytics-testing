@@ -16,6 +16,12 @@ const nextConfig: NextConfig = {
         '@': path.resolve(__dirname, 'src')
       }
     }
+  },
+
+  logging: {
+    fetches: {
+      fullUrl: false
+    }
   }
 }
 
