@@ -7,7 +7,7 @@ import * as sns from 'aws-cdk-lib/aws-sns';
 import * as subscriptions from 'aws-cdk-lib/aws-sns-subscriptions';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
-import * as child_process from 'child_process';
+import { sendNotification } from '../../utils/notification-utils';
 
 export class InvokeSlackLamdaSecondStack extends cdk.Stack {
  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -33,20 +33,6 @@ export class InvokeSlackLamdaSecondStack extends cdk.Stack {
    });
    
     // スクリプト実行関数を呼び出し
-    this.sendNotification('aaa');
- }
-
- /**
-  * 通知スクリプトを実行する関数
-  * @param message 送信するメッセージ
-  */
- private sendNotification(message: string): void {
-   try {
-     const scriptPath = '../../script/send_notification.js';
-     const result = child_process.execSync(`node ${scriptPath} "${message}"`);
-     console.log("★★★ Script Output ★★★: ", result.toString());
-   } catch (error) {
-     console.error("★★★ Script Execution Failed ★★★: ", error);
-   }
+    sendNotification('from cdk');
  }
 }
