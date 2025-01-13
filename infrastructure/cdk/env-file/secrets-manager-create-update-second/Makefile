@@ -43,7 +43,7 @@ endef
 # ===========================================
 # Operation Layer
 # ===========================================
-.PHONY: first-deploy reset-deploy destroy test-slack-notification
+.PHONY: first-deploy reset-deploy destroy dev-create prod-delete
 
 # Primary Operations
 first-deploy:
@@ -56,6 +56,13 @@ reset-deploy:
 destroy:
 	$(CDK) destroy $(DESTROY_FLAGS)
 
+# Environment Specific Operations
+dev-create: _bootstrap  # 開発環境で新規作成
+	$(CDK) deploy $(DEPLOY_FLAGS) --context mode=create --context environment=development
+
+dev-delete: _bootstrap  # 本番環境で削除
+	$(CDK) deploy $(DEPLOY_FLAGS) --context mode=delete --context environment=development
+
 # Private Utilities
 .PHONY: _bootstrap _check-stacks
 
@@ -65,12 +72,3 @@ _bootstrap:
 _check-stacks:
 	$(call check_failed_stacks)
 
-
-# # # 開発環境で新規作成
-# cdk deploy --context mode=create --context environment=development
-
-# # 本番環境で削除
-# cdk deploy --context mode=delete --context environment=production
-
-# # スタック全体を削除
-# cdk destroy
