@@ -2,9 +2,14 @@ import { LambdaClient, InvokeCommand } from '@aws-sdk/client-lambda';
 import dotenv from 'dotenv';
 import path from 'path';
 import { Buffer } from 'buffer';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
-// 環境変数の読み込み
-// dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// .envファイルの読み込み
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 // エラーメッセージを整形するヘルパー関数
 function formatErrorMessage(error) {
@@ -40,20 +45,20 @@ function formatErrorMessage(error) {
     };
 }
 
-// 環境変数のハードコード（開発用）
+// .envからAWS設定を読み込み
 const config = {
-    AWS_REGION: 'ap-northeast-1',
-    AWS_ACCESS_KEY_ID: 'DUMMY_ACCESS_KEY',  // 本番環境では絶対に使用しないでください
-    AWS_SECRET_ACCESS_KEY: 'DUMMY_SECRET_KEY',  // 本番環境では絶対に使用しないでください
+    AWS_REGION: process.env.NEXT_PUBLIC_AWS_REGION || 'ap-northeast-1',
+    AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+    AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
     LAMBDA_SLACK_NOTIFICATION_FUNCTION: 'slack-notification',
-    SLACK_WEBHOOK_URL: 'https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX'
+    SLACK_WEBHOOK_URL: process.env.SLACK_WEBHOOK_URL
 };
 
-// AWS設定（configオブジェクトを使用）
+// AWS設定（.envから取得）
 console.log('AWS Configuration:');
 console.log('Region:', config.AWS_REGION);
-console.log('Access Key ID:', '****' + config.AWS_ACCESS_KEY_ID.slice(-4));
-console.log('Secret Access Key:', '****' + config.AWS_SECRET_ACCESS_KEY.slice(-4));
+console.log('Access Key ID:', config.AWS_ACCESS_KEY_ID ? '****' + config.AWS_ACCESS_KEY_ID.slice(-4) : 'Not Set');
+console.log('Secret Access Key:', config.AWS_SECRET_ACCESS_KEY ? '****' + config.AWS_SECRET_ACCESS_KEY.slice(-4) : 'Not Set');
 
 const client = new LambdaClient({
     region: config.AWS_REGION,

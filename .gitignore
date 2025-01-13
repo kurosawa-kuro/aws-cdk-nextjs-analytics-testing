@@ -129,7 +129,3 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-
-
-infrastructure/script/send_notification.js
-infrastructure/script/send_notification.js
