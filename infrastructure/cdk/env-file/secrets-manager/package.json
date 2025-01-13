@@ -1,8 +1,8 @@
 {
-  "name": "secrets-manager-create-update-second",
+  "name": "secrets-manager",
   "version": "0.1.0",
   "bin": {
-    "secrets-manager-create-update-second": "bin/secrets-manager-create-update-second.js"
+    "secrets-manager": "bin/secrets-manager.js"
   },
   "scripts": {
     "build": "tsc",

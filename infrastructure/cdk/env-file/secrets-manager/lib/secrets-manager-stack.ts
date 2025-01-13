@@ -6,7 +6,7 @@ import * as cr from 'aws-cdk-lib/custom-resources';
 
 // 定数定義
 const SECRET_CONFIG = {
-  FIXED_SECRET_NAME: 'test-secret-03',
+  FIXED_SECRET_NAME: 'test-secret-11',
   DEFAULT_ENVIRONMENT: 'development',
   DISABLE_ROTATION_TAG: 'DisableRotation',
   SECRET_GENERATION_CONFIG: {
@@ -139,7 +139,7 @@ class SecretManager {
   }
 }
 
-export class SecretsManagerCreateUpdateSecondStack extends cdk.Stack {
+export class SecretsManagerStack extends cdk.Stack {
   private readonly mode: OperationMode;
   private readonly secretConfig: SecretConfig;
   private readonly secretManager: SecretManager;

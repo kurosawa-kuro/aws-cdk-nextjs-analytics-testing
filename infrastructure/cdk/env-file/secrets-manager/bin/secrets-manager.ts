@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import * as cdk from 'aws-cdk-lib';
-import { SecretsManagerCreateUpdateSecondStack } from '../lib/secrets-manager-create-update-second-stack';
+import { SecretsManagerStack } from '../lib/secrets-manager-stack';
 
 const app = new cdk.App();
-new SecretsManagerCreateUpdateSecondStack(app, 'SecretsManagerCreateUpdateSecondStack', {
+new SecretsManagerStack(app, 'SecretsManagerStack', {
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */
