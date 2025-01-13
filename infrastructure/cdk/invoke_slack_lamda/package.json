@@ -1,8 +1,8 @@
 {
-  "name": "fetch-parameter-store",
+  "name": "invoke_slack_lamda",
   "version": "0.1.0",
   "bin": {
-    "fetch-parameter-store": "bin/fetch-parameter-store.js"
+    "invoke_slack_lamda": "bin/invoke_slack_lamda.js"
   },
   "scripts": {
     "build": "tsc",

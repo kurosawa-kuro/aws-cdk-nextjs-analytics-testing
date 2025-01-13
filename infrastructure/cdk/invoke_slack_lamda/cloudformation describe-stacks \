@@ -1,0 +1,61 @@
+{
+    "StackResources": [
+        {
+            "StackName": "InvokeSlackLamdaStack",
+            "StackId": "arn:aws:cloudformation:ap-northeast-1:985539793438:stack/InvokeSlackLamdaStack/ea322da0-d184-11ef-b750-0a136da6b717",
+            "LogicalResourceId": "CDKMetadata",
+            "PhysicalResourceId": "ea322da0-d184-11ef-b750-0a136da6b717",
+            "ResourceType": "AWS::CDK::Metadata",
+            "Timestamp": "2025-01-13T08:23:47.385000+00:00",
+            "ResourceStatus": "UPDATE_COMPLETE",
+            "DriftInformation": {
+                "StackResourceDriftStatus": "NOT_CHECKED"
+            }
+        },
+        {
+            "StackName": "InvokeSlackLamdaStack",
+            "StackId": "arn:aws:cloudformation:ap-northeast-1:985539793438:stack/InvokeSlackLamdaStack/ea322da0-d184-11ef-b750-0a136da6b717",
+            "LogicalResourceId": "InvokeSlackLambda",
+            "PhysicalResourceId": "InvokeSlackLamdaStack-InvokeSlackLambda-1OCNZYV7KBZDO",
+            "ResourceType": "AWS::CloudFormation::CustomResource",
+            "Timestamp": "2025-01-13T08:23:30.504000+00:00",
+            "ResourceStatus": "CREATE_FAILED",
+            "ResourceStatusReason": "Resource creation cancelled",
+            "DriftInformation": {
+                "StackResourceDriftStatus": "NOT_CHECKED"
+            }
+        }
+    ]
+}
+{
+    "Stacks": [
+        {
+            "StackId": "arn:aws:cloudformation:ap-northeast-1:985539793438:stack/InvokeSlackLamdaStack/ea322da0-d184-11ef-b750-0a136da6b717",
+            "StackName": "InvokeSlackLamdaStack",
+            "Parameters": [
+                {
+                    "ParameterKey": "BootstrapVersion",
+                    "ParameterValue": "/cdk-bootstrap/hnb659fds/version",
+                    "ResolvedValue": "25"
+                }
+            ],
+            "CreationTime": "2025-01-13T08:03:46.912000+00:00",
+            "LastUpdatedTime": "2025-01-13T08:16:16.269000+00:00",
+            "RollbackConfiguration": {},
+            "StackStatus": "UPDATE_ROLLBACK_COMPLETE_CLEANUP_IN_PROGRESS",
+            "DisableRollback": false,
+            "NotificationARNs": [],
+            "Capabilities": [
+                "CAPABILITY_IAM",
+                "CAPABILITY_NAMED_IAM",
+                "CAPABILITY_AUTO_EXPAND"
+            ],
+            "RoleARN": "arn:aws:iam::985539793438:role/cdk-hnb659fds-cfn-exec-role-985539793438-ap-northeast-1",
+            "Tags": [],
+            "EnableTerminationProtection": false,
+            "DriftInformation": {
+                "StackDriftStatus": "NOT_CHECKED"
+            }
+        }
+    ]
+}
