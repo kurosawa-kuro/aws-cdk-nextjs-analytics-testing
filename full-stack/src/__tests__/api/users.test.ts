@@ -1,19 +1,8 @@
-import { describe, it, expect, beforeAll, afterAll, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { TestSetup } from '../test-setup'
 import { POST } from '@/app/api/users/route'
-import { prisma } from '@/lib/prisma'
 import { getUsersData } from '@/app/page'
-import { test } from 'vitest'
-
-// テストデータ管理用のユーティリティ関数を追加
-const setupTestUsers = async (users: Array<{ email: string; name: string | null }>) => {
-  await prisma.user.createMany({ data: users });
-};
-
-const cleanupTestUsers = async (emails: string[]) => {
-  await prisma.user.deleteMany({
-    where: { email: { in: emails } }
-  });
-};
+import { prisma } from '@/lib/prisma';
 
 // 共通のテストデータを定数化
 const TEST_USERS = [
@@ -30,28 +19,22 @@ const assertUserData = (actual: any, expected: any) => {
 
 describe('Users API (Integration)', () => {
   beforeEach(async () => {
-    await prisma.user.deleteMany({});
-    await setupTestUsers(TEST_USERS.slice(0, 2));
+    // 各テスト前に初期データをセットアップ
+    await TestSetup.setupTestUsers(TEST_USERS.slice(0, 2));
   });
 
   afterEach(async () => {
-    await cleanupTestUsers(TEST_USERS.map(u => u.email));
-  });
-
-  afterAll(async () => {
-    await prisma.$disconnect();
+    // 各テスト後にデータをクリーンアップ
+    await TestSetup.cleanupTestUsers(TEST_USERS.map(u => u.email));
   });
 
   describe('POST /api/users', () => {
-    const createTestRequest = (body: any) => new Request('http://localhost/api/users', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-
     it('should create new user with valid data', async () => {
       const mockBody = { email: 'unique@example.com', name: 'New User' };
-      const req = createTestRequest(mockBody);
+      const req = TestSetup.createMockRequest('/api/users', {
+        method: 'POST',
+        body: JSON.stringify(mockBody)
+      });
 
       const res = await POST(req);
       if (!res) {
@@ -68,25 +51,23 @@ describe('Users API (Integration)', () => {
       });
       assertUserData(createdUser, mockBody);
     });
-
-    // 他のテストケースも同様にリファクタリング可能
   });
 });
 
 describe('getUsers Function', () => {
-  beforeAll(async () => {
-    await prisma.user.deleteMany({});
-    await setupTestUsers(TEST_USERS);
+  beforeEach(async () => {
+    // 各テスト前に初期データをセットアップ
+    await TestSetup.setupTestUsers(TEST_USERS);
   });
 
-  afterAll(async () => {
-    await cleanupTestUsers(TEST_USERS.map(u => u.email));
+  afterEach(async () => {
+    // 各テスト後にデータをクリーンアップ
+    await TestSetup.cleanupTestUsers(TEST_USERS.map(u => u.email));
   });
 
   it('should return all users with correct data', async () => {
     const users = await getUsersData();
     
-    // データ順序を考慮せずに検証
     TEST_USERS.forEach(expectedUser => {
       const actualUser = users.find(u => u.email === expectedUser.email);
       expect(actualUser).toBeDefined();
