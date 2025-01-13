@@ -4,7 +4,7 @@ import path from 'path';
 import { Buffer } from 'buffer';
 
 // 環境変数の読み込み
-dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
+// dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 
 // エラーメッセージを整形するヘルパー関数
 function formatErrorMessage(error) {
@@ -49,7 +49,12 @@ const config = {
     SLACK_WEBHOOK_URL: 'https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX'
 };
 
-// AWS設定
+// AWS設定（configオブジェクトを使用）
+console.log('AWS Configuration:');
+console.log('Region:', config.AWS_REGION);
+console.log('Access Key ID:', '****' + config.AWS_ACCESS_KEY_ID.slice(-4));
+console.log('Secret Access Key:', '****' + config.AWS_SECRET_ACCESS_KEY.slice(-4));
+
 const client = new LambdaClient({
     region: config.AWS_REGION,
     credentials: {
