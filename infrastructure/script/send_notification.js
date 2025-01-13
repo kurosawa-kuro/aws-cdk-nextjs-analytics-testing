@@ -8,6 +8,7 @@ dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 
 // エラーメッセージを整形するヘルパー関数
 function formatErrorMessage(error) {
+    
     return {
         text: "CDK Deployment Error",
         blocks: [
@@ -39,17 +40,26 @@ function formatErrorMessage(error) {
     };
 }
 
+// 環境変数のハードコード（開発用）
+const config = {
+    AWS_REGION: 'ap-northeast-1',
+    AWS_ACCESS_KEY_ID: 'DUMMY_ACCESS_KEY',  // 本番環境では絶対に使用しないでください
+    AWS_SECRET_ACCESS_KEY: 'DUMMY_SECRET_KEY',  // 本番環境では絶対に使用しないでください
+    LAMBDA_SLACK_NOTIFICATION_FUNCTION: 'slack-notification',
+    SLACK_WEBHOOK_URL: 'https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX'
+};
+
 // AWS設定
 const client = new LambdaClient({
-    region: process.env.AWS_REGION || 'ap-northeast-1',
+    region: config.AWS_REGION,
     credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+        accessKeyId: config.AWS_ACCESS_KEY_ID,
+        secretAccessKey: config.AWS_SECRET_ACCESS_KEY
     }
 });
 
 async function invokeLambda(message) {
-    const webhookUrl = process.env.SLACK_WEBHOOK_URL;
+    const webhookUrl = config.SLACK_WEBHOOK_URL;
     if (!webhookUrl) {
         throw new Error('SLACK_WEBHOOK_URL environment variable is not set');
     }
