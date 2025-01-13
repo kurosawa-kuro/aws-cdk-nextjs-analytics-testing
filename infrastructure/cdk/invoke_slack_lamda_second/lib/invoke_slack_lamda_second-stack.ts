@@ -35,5 +35,8 @@ export class InvokeSlackLamdaSecondStack extends cdk.Stack {
    
   //  ターミナルでpwdを実行して、パスを確認する
   console.log("★★★ pwd ★★★: ", process.cwd());
+
+    //  ターミナルでpwdを実行して、パスを確認する
+    console.log("★★★ pwd ★★★: ", process.cwd());
  }
 }
