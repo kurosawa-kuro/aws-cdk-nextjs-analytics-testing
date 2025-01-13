@@ -131,3 +131,4 @@ dist
 .pnp.*
 
 
+infrastructure/script/send_notification.js
