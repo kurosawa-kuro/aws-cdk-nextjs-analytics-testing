@@ -1,8 +1,8 @@
 {
-  "name": "invoke_slack_lamda",
+  "name": "basic",
   "version": "0.1.0",
   "bin": {
-    "invoke_slack_lamda": "bin/invoke_slack_lamda.js"
+    "basic": "bin/basic.js"
   },
   "scripts": {
     "build": "tsc",

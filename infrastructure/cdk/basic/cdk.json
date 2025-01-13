@@ -1,5 +1,5 @@
 {
-  "app": "npx ts-node --prefer-ts-exts bin/invoke_slack_lamda_second.ts",
+  "app": "npx ts-node --prefer-ts-exts bin/basic.ts",
   "watch": {
     "include": [
       "**"
