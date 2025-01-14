@@ -1,4 +1,4 @@
-import { CloudWatchLogsClient, PutLogEventsCommand, CreateLogStreamCommand, DescribeLogStreamsCommand } from "@aws-sdk/client-cloudwatch-logs";
+import { CloudWatchLogsClient, PutLogEventsCommand, CreateLogStreamCommand, DescribeLogStreamsCommand, CreateLogGroupCommand, DescribeLogGroupsCommand } from "@aws-sdk/client-cloudwatch-logs";
 import fs from 'fs';
 import readline from 'readline';
 import * as dotenv from 'dotenv';
@@ -14,6 +14,7 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 console.log('upload-cloudwatch.js');
 
+
 // 環境変数の確認
 console.log('AWS Access Key ID:', process.env.AWS_ACCESS_KEY_ID ? 'Set' : 'Not set');
 console.log('AWS Secret Access Key:', process.env.AWS_SECRET_ACCESS_KEY ? 'Set' : 'Not set');
@@ -28,12 +29,42 @@ const client = new CloudWatchLogsClient({
 });
 
 // CloudWatchの設定
-const LOG_GROUP_NAME = 'ts-test-11';
+const LOG_GROUP_NAME = 'ts-test-12';
 const LOG_STREAM_NAME = `app-logs-${new Date().toISOString().split('T')[0]}`;
+
+// ロググループの存在確認と作成
+async function ensureLogGroup() {
+  try {
+    // ロググループの存在確認
+    const describeCommand = new DescribeLogGroupsCommand({
+      logGroupNamePrefix: LOG_GROUP_NAME
+    });
+    
+    const response = await client.send(describeCommand);
+    const exists = response.logGroups?.some(group => group.logGroupName === LOG_GROUP_NAME);
+    
+    if (!exists) {
+      console.log('Creating new log group:', LOG_GROUP_NAME);
+      const createCommand = new CreateLogGroupCommand({
+        logGroupName: LOG_GROUP_NAME
+      });
+      await client.send(createCommand);
+      console.log('Log group created successfully');
+    } else {
+      console.log('Log group already exists');
+    }
+  } catch (err) {
+    console.error('Error ensuring log group:', err);
+    throw err;
+  }
+}
 
 // ログストリームの存在確認と作成
 async function ensureLogStream() {
   try {
+    // まずロググループの存在を確認・作成
+    await ensureLogGroup();
+
     // ログストリームの存在確認
     const describeCommand = new DescribeLogStreamsCommand({
       logGroupName: LOG_GROUP_NAME,
