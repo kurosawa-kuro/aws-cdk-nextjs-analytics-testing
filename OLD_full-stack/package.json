@@ -25,7 +25,8 @@
     "morgan": "^1.10.0",
     "next": "15.1.4",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "winston-cloudwatch": "^6.3.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

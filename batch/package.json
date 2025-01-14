@@ -12,6 +12,6 @@
 	"description": "",
 	"dependencies": {
 		"@aws-sdk/client-cloudwatch-logs": "^3.726.1",
-		"dotenv": "^16.4.5"
+		"dotenv": "^16.4.7"
 	}
 }
